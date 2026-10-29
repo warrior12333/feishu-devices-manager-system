@@ -1,0 +1,96 @@
+-- MySQL 建表脚本（预留：当前实现为 SQLite，切换 MySQL 时执行本脚本并把 db.js 换成 mysql2 连接池）
+-- 字段与 server/src/db.js 中 SQLite schema 完全对应。
+
+CREATE TABLE IF NOT EXISTS users (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  userid VARCHAR(64) NOT NULL UNIQUE,
+  name VARCHAR(128) NOT NULL DEFAULT '',
+  avatar VARCHAR(512) NOT NULL DEFAULT '',
+  role VARCHAR(16) NOT NULL DEFAULT 'member',
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS devices (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(128) NOT NULL,
+  category VARCHAR(64) NOT NULL DEFAULT '未分类',
+  model VARCHAR(128) NOT NULL DEFAULT '',
+  serial_no VARCHAR(128) NOT NULL DEFAULT '',
+  status VARCHAR(16) NOT NULL DEFAULT 'idle',
+  location VARCHAR(128) NOT NULL DEFAULT '',
+  image VARCHAR(512) NOT NULL DEFAULT '',
+  owner_userid VARCHAR(64) NOT NULL DEFAULT '',
+  remark TEXT,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_devices_category (category),
+  INDEX idx_devices_owner (owner_userid)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS borrows (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  device_id BIGINT NOT NULL,
+  borrower_userid VARCHAR(64) NOT NULL,
+  reason VARCHAR(500) NOT NULL,
+  expect_return_date DATE NOT NULL,
+  borrow_photo VARCHAR(512) NOT NULL DEFAULT '',
+  approver_userid VARCHAR(64) NOT NULL,
+  status VARCHAR(16) NOT NULL DEFAULT 'pending',
+  reject_reason VARCHAR(500) NOT NULL DEFAULT '',
+  return_photo VARCHAR(512) NOT NULL DEFAULT '',
+  return_reject_reason VARCHAR(500) NOT NULL DEFAULT '',
+  apply_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  approve_at DATETIME NULL,
+  return_apply_at DATETIME NULL,
+  finish_at DATETIME NULL,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_borrows_borrower (borrower_userid, status),
+  INDEX idx_borrows_approver (approver_userid, status),
+  CONSTRAINT fk_borrows_device FOREIGN KEY (device_id) REFERENCES devices(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS message_log (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  to_userid VARCHAR(64) NOT NULL,
+  title VARCHAR(255) NOT NULL,
+  description TEXT,
+  url VARCHAR(512) NOT NULL DEFAULT '',
+  mock TINYINT NOT NULL DEFAULT 0,
+  sent TINYINT NOT NULL DEFAULT 0,
+  error VARCHAR(500) NOT NULL DEFAULT '',
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 企业微信之外、通过微信扫码借出的人员（学号为身份键；手机号为外部借出必填项）
+CREATE TABLE IF NOT EXISTS external_users (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  openid VARCHAR(64) NOT NULL UNIQUE,
+  unionid VARCHAR(64) NOT NULL DEFAULT '',
+  nickname VARCHAR(64) NOT NULL DEFAULT '',
+  avatar VARCHAR(512) NOT NULL DEFAULT '',
+  class_name VARCHAR(64) NOT NULL DEFAULT '' COMMENT '班级',
+  student_name VARCHAR(64) NOT NULL DEFAULT '' COMMENT '姓名',
+  student_no VARCHAR(32) NOT NULL DEFAULT '' COMMENT '学号',
+  phone VARCHAR(20) NOT NULL DEFAULT '' COMMENT '手机号（外部借出必填）',
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  bound_at DATETIME NULL,
+  INDEX idx_external_student_no (student_no)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 系统设置（键值对）：system_closed / system_close_reason 等
+CREATE TABLE IF NOT EXISTS settings (
+  k VARCHAR(64) PRIMARY KEY,
+  v TEXT NOT NULL,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 系统公告：超管维护，启用中的公告在前端首页轮播展示
+CREATE TABLE IF NOT EXISTS announcements (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  title VARCHAR(128) NOT NULL,
+  content VARCHAR(2000) NOT NULL DEFAULT '',
+  enabled TINYINT NOT NULL DEFAULT 1,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_announcements_enabled (enabled)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

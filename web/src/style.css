@@ -1,0 +1,561 @@
+/* ==========================================================
+   全局设计系统 · Ant Design 风格（移动端 + 桌面端统一）
+   主色 #1677ff · 中性灰布局 · 8px 圆角 · 细边框 · 轻阴影
+   ========================================================== */
+:root {
+  /* Ant Design 令牌 */
+  --ant-primary: #1677ff;
+  --ant-primary-hover: #4096ff;
+  --ant-bg-layout: #f5f7fa;
+  --ant-card: #ffffff;
+  --ant-text: rgba(0, 0, 0, 0.88);
+  --ant-text-2: rgba(0, 0, 0, 0.65);
+  --ant-text-3: rgba(0, 0, 0, 0.45);
+  --ant-border: #f0f0f0;
+  --ant-radius: 8px;
+  --ant-shadow: 0 1px 2px rgba(0, 0, 0, 0.03), 0 1px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px rgba(0, 0, 0, 0.02);
+  --ant-shadow-hover: 0 6px 16px rgba(0, 0, 0, 0.08);
+
+  /* Vant 主题映射到 AntD 色板 */
+  --van-primary-color: #1677ff;
+  --van-success-color: #52c41a;
+  --van-warning-color: #faad14;
+  --van-danger-color: #ff4d4f;
+  --van-text-color: rgba(0, 0, 0, 0.88);
+  --van-text-color-2: rgba(0, 0, 0, 0.65);
+  --van-text-color-3: rgba(0, 0, 0, 0.45);
+  --van-border-color: #f0f0f0;
+  --van-cell-group-inset-radius: 8px;
+  --van-cell-vertical-padding: 12px;
+  --van-nav-bar-height: 46px;
+  --van-nav-bar-title-font-size: 16px;
+  --van-nav-bar-title-font-weight: 600;
+  --van-tabs-bottom-bar-color: #1677ff;
+  --van-tab-active-text-color: #1677ff;
+  --van-dialog-radius: 8px;
+  --van-calendar-selected-day-background-color: #1677ff;
+  --van-search-content-background: #ffffff;
+  --van-tag-border-radius: 4px;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background: var(--ant-bg-layout);
+  color: var(--ant-text);
+  font-size: 14px;
+  font-family: 'HarmonyOS Sans SC', HarmonyOS_Sans_SC, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- AntD 按钮：方形 6px 圆角（覆盖 round 胶囊） ---------- */
+.van-button--round {
+  border-radius: 6px;
+}
+
+/* ---------- 页面容器：移动优先，桌面居中 ---------- */
+.page {
+  min-height: 100vh;
+  max-width: 760px;
+  margin: 0 auto;
+  padding-bottom: 24px;
+}
+.page.with-tabbar {
+  padding-bottom: 76px;
+}
+
+/* ---------- 底部标签栏：AntD 平底式（贴边、上边框、无胶囊） ---------- */
+.van-tabbar--fixed {
+  left: 50%;
+  right: auto;
+  transform: translateX(-50%);
+  max-width: 760px;
+  width: 100%;
+  bottom: 0;
+  border-radius: 0;
+  border: 1px solid var(--ant-border);
+  border-bottom: 0;
+  box-shadow: none;
+}
+.van-tabbar-item--active {
+  color: var(--ant-primary);
+  font-weight: 600;
+}
+
+/* ---------- 导航栏 / 搜索 ---------- */
+.van-nav-bar {
+  background: var(--ant-card);
+  border-bottom: 1px solid var(--ant-border);
+}
+.van-nav-bar .van-icon {
+  color: var(--ant-text);
+}
+.van-search {
+  background: transparent;
+  padding: 8px 12px;
+}
+.van-search .van-field__control {
+  color: var(--ant-text);
+}
+
+/* ---------- 列表卡片（AntD card 质感） ---------- */
+.row-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 10px 12px 0;
+  padding: 12px;
+  background: var(--ant-card);
+  border-radius: var(--ant-radius);
+  border: 1px solid var(--ant-border);
+  box-shadow: var(--ant-shadow);
+  cursor: pointer;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+@media (hover: hover) {
+  .row-item:hover {
+    box-shadow: var(--ant-shadow-hover);
+    border-color: #d9d9d9;
+  }
+}
+.row-item:active {
+  background: #fafafa;
+}
+.row-item .thumb {
+  width: 64px;
+  height: 64px;
+  border-radius: 6px;
+  object-fit: cover;
+  flex-shrink: 0;
+  background: #fafafa;
+}
+.row-item .thumb-empty {
+  width: 64px;
+  height: 64px;
+  border-radius: 6px;
+  background: #fafafa;
+  border: 1px dashed var(--ant-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #c6ccd6;
+  flex-shrink: 0;
+}
+.row-item .info {
+  flex: 1;
+  min-width: 0;
+}
+.row-item .title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ant-text);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow: hidden;
+  flex-wrap: wrap;
+}
+.row-item .title .txt {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.row-item .sub {
+  margin-top: 4px;
+  color: var(--ant-text-3);
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow: hidden;
+  flex-wrap: wrap;
+}
+.tag-gap {
+  margin-right: 4px;
+}
+
+/* ---------- 分组卡片 / 空状态 ---------- */
+.van-cell-group--inset {
+  margin: 12px 12px 0;
+  border-radius: var(--ant-radius);
+  border: 1px solid var(--ant-border);
+  box-shadow: var(--ant-shadow);
+  overflow: hidden;
+}
+.van-cell__title {
+  color: var(--ant-text-2);
+}
+.van-cell__title span,
+.van-cell__title Label {
+  color: var(--ant-text);
+}
+.van-empty {
+  padding: 40px 0;
+}
+
+/* ---------- 底部弹层：顶部 12px 圆角（AntD 抽屉风格） ---------- */
+.van-popup--bottom.van-popup--round {
+  border-radius: 12px 12px 0 0;
+}
+
+/* ---------- 通用状态色（AntD 语义） ---------- */
+.overdue {
+  color: var(--van-danger-color);
+  font-weight: 600;
+}
+.reject {
+  color: var(--van-danger-color);
+}
+
+/* ==========================================================
+   桌面端专属布局（.app-desktop 由 DesktopShell 挂载）
+   ========================================================== */
+@media (min-width: 768px) {
+  /* 移动端导航件在桌面布局中隐藏（导航由左侧栏承担） */
+  .app-desktop .van-nav-bar,
+  .app-desktop .van-steps {
+    display: none;
+  }
+  .app-desktop .page {
+    max-width: none;
+    min-height: auto;
+    padding: 4px 0 0;
+  }
+  .app-desktop .page.with-tabbar {
+    padding-bottom: 24px;
+  }
+
+  /* 设备库：多列网格卡片（图在上，信息在下） */
+  .app-desktop .dev-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(225px, 1fr));
+    gap: 14px;
+  }
+  .app-desktop .dev-list .row-item {
+    flex-direction: column;
+    align-items: stretch;
+    height: 100%;
+    margin: 0;
+    gap: 10px;
+  }
+  .app-desktop .dev-list .row-item .thumb,
+  .app-desktop .dev-list .row-item .thumb-empty {
+    width: 100%;
+    height: 150px;
+  }
+  .app-desktop .dev-list .row-item > .van-icon-arrow {
+    display: none;
+  }
+  .app-desktop .dev-list .van-list__finished-text,
+  .app-desktop .dev-list .van-list__loading {
+    grid-column: 1 / -1;
+  }
+
+  /* 借还/审批列表：双列卡片 */
+  .app-desktop .list-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 6px;
+  }
+  .app-desktop .list-grid .row-item {
+    margin: 6px 0 0;
+    height: 100%;
+    box-sizing: border-box;
+  }
+
+  /* 详情页：显式双栏（左主信息流 + 右侧边栏），间距紧凑 */
+  .app-desktop .detail-cols {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    gap: 14px;
+    align-items: start;
+  }
+  .app-desktop .detail-main .card,
+  .app-desktop .detail-side .card {
+    margin: 0 0 14px;
+  }
+  .app-desktop .detail-side {
+    position: sticky;
+    top: 16px;
+  }
+  /* 操作栏：桌面一律内联、按钮紧凑右对齐（修复 fixed 吸底条盖住左侧导航） */
+  .app-desktop .action-bar {
+    position: static;
+    left: auto;
+    transform: none;
+    width: auto;
+    max-width: none;
+    justify-content: flex-end;
+    gap: 12px;
+    padding: 16px 0 0;
+    border: 0;
+    background: transparent;
+  }
+  .app-desktop .action-bar .van-button {
+    width: auto;
+    min-width: 132px;
+    height: 40px;
+    font-size: 15px;
+  }
+  .app-desktop .action-bar .admin-acting {
+    margin: 0 auto 0 0;
+  }
+  .app-desktop .page.has-action {
+    padding-bottom: 24px;
+  }
+
+  /* 表单/申请分组限宽，保持可读性 */
+  .app-desktop .van-cell-group--inset {
+    max-width: 760px;
+  }
+
+  /* 底部操作按钮限宽 */
+  .app-desktop .actions,
+  .app-desktop .submit,
+  .app-desktop .bottom {
+    max-width: 760px;
+  }
+
+  /* 首页操作按钮：紧凑等高排列，不再 block 拉满 */
+  .app-desktop .home-page .actions .van-button {
+    height: 36px;
+    padding: 0 22px;
+    width: auto;
+    min-width: 150px;
+  }
+}
+
+/* ==========================================================
+   AntD 组件层（PageHeader / Card / Descriptions / Timeline …）
+   ========================================================== */
+.pg-header {
+  padding: 18px 16px 6px;
+}
+.pg-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--ant-text);
+  flex-wrap: wrap;
+}
+.pg-sub {
+  margin-top: 6px;
+  color: var(--ant-text-3);
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.pg-extra {
+  margin-top: 12px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* AntD 默认按钮 / 危险幽灵按钮 */
+.btn {
+  height: 32px;
+  padding: 0 14px;
+  border-radius: 6px;
+  border: 1px solid #d9d9d9;
+  background: #fff;
+  color: rgba(0, 0, 0, 0.88);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.btn:hover {
+  border-color: var(--ant-primary);
+  color: var(--ant-primary);
+}
+.btn.danger-ghost {
+  border-color: #ffccc7;
+  color: var(--van-danger-color);
+}
+.btn.danger-ghost:hover {
+  background: #fff1f0;
+  border-color: var(--van-danger-color);
+  color: var(--van-danger-color);
+}
+
+/* 卡片（带标题栏） */
+.card {
+  background: var(--ant-card);
+  border: 1px solid var(--ant-border);
+  border-radius: var(--ant-radius);
+  box-shadow: var(--ant-shadow);
+  margin: 12px;
+  overflow: hidden;
+}
+.card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--ant-border);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ant-text);
+}
+.card-head .card-extra {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--ant-text-3);
+}
+.card-body {
+  padding: 2px 16px 12px;
+}
+.card-body.tight {
+  padding: 0;
+}
+
+/* Descriptions 描述列表 */
+.desc {
+  margin: 0;
+}
+.desc-row {
+  display: grid;
+  grid-template-columns: 96px 1fr;
+  gap: 12px;
+  padding: 9px 0;
+  border-bottom: 1px dashed #f5f5f5;
+  font-size: 13px;
+  line-height: 1.55;
+}
+.desc-row:last-child {
+  border-bottom: 0;
+}
+.desc-label {
+  color: var(--ant-text-3);
+  flex-shrink: 0;
+}
+.desc-value {
+  color: var(--ant-text);
+  word-break: break-all;
+}
+
+/* 照片网格 */
+.photo-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-top: 10px;
+}
+.photo-grid img {
+  width: 96px;
+  height: 96px;
+  border-radius: 6px;
+  object-fit: cover;
+  border: 1px solid var(--ant-border);
+  cursor: pointer;
+  transition: box-shadow 0.15s ease;
+}
+.photo-grid img:hover {
+  box-shadow: var(--ant-shadow-hover);
+}
+
+/* 时间线 */
+.timeline {
+  padding: 10px 0 4px;
+}
+.tl-item {
+  position: relative;
+  padding: 0 0 16px 18px;
+  border-left: 1px solid #e5e6eb;
+  margin-left: 4px;
+}
+.tl-item:last-child {
+  border-left-color: transparent;
+  padding-bottom: 2px;
+}
+.tl-item::before {
+  content: '';
+  position: absolute;
+  left: -4.5px;
+  top: 4px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--ant-primary);
+}
+.tl-item.gray::before {
+  background: #d9d9d9;
+}
+.tl-time {
+  font-size: 12px;
+  color: var(--ant-text-3);
+}
+.tl-label {
+  font-size: 13px;
+  color: var(--ant-text-2);
+  margin-top: 2px;
+}
+
+/* 底部操作栏（移动吸底 / 桌面内联） */
+.action-bar {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 0;
+  width: 100%;
+  max-width: 760px;
+  padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+  background: var(--ant-card);
+  border-top: 1px solid var(--ant-border);
+  display: flex;
+  gap: 10px;
+  z-index: 9;
+  box-sizing: border-box;
+}
+.page.has-action {
+  padding-bottom: 104px;
+}
+
+/* 详情头图 */
+.hero img {
+  width: 100%;
+  max-height: 300px;
+  object-fit: cover;
+  display: block;
+}
+.hero-placeholder {
+  height: 140px;
+  background: #fafafa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #c6ccd6;
+}
+
+/* 桌面端组件层适配 */
+@media (min-width: 768px) {
+  .app-desktop .pg-header {
+    padding: 0 0 6px;
+  }
+  .app-desktop .pg-extra {
+    margin-top: 10px;
+  }
+  .app-desktop .card {
+    margin: 12px 0;
+  }
+  .app-desktop .action-bar {
+    position: static;
+    transform: none;
+    max-width: none;
+    border: 0;
+    padding: 16px 0 0;
+    background: transparent;
+  }
+  .app-desktop .page.has-action {
+    padding-bottom: 24px;
+  }
+  .app-desktop .desc-row {
+    grid-template-columns: 104px 1fr;
+  }
+}

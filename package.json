@@ -1,0 +1,13 @@
+{
+  "name": "wecom-device-manager",
+  "version": "1.0.0",
+  "private": true,
+  "description": "企业微信设备管理应用（设备借还 + 应用内审批）",
+  "scripts": {
+    "setup": "npm --prefix server install && npm --prefix web install",
+    "build": "npm --prefix web run build",
+    "start": "node server/src/index.js",
+    "dev:server": "npm --prefix server run dev",
+    "dev:web": "npm --prefix web run dev"
+  }
+}

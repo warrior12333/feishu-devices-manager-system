@@ -1,0 +1,9 @@
+node_modules/
+dist/
+server/data/
+server/uploads/*
+!server/uploads/.gitkeep
+.env
+*.log
+uploads_backup.tar.gz
+.mimosa/
