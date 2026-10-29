@@ -2,6 +2,15 @@
 
 [English](./README.md) | 简体中文
 
+![Node.js](https://img.shields.io/badge/Node.js-18%2B-339933?style=flat&logo=node.js&logoColor=white)
+![Express](https://img.shields.io/badge/Express-4-000000?style=flat&logo=express&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-5.7%2B-4479A1?style=flat&logo=mysql&logoColor=white)
+![Vue.js](https://img.shields.io/badge/Vue.js-3.5-4FC08D?style=flat&logo=vuedotjs&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-5-646CFF?style=flat&logo=vite&logoColor=white)
+![Vant](https://img.shields.io/badge/Vant-4-001938?style=flat&logo=vant&logoColor=white)
+![飞书](https://img.shields.io/badge/飞书-开放平台-00D6B9)
+![JWT](https://img.shields.io/badge/Auth-JWT-D63AFF?style=flat&logo=jsonwebtokens&logoColor=white)
+
 基于**飞书自建应用**的设备资产管理 H5：设备台账（含多图与二维码）、设备借出申请与负责人审批、拍照领用与归还确认，全部审批在应用内完成，并通过飞书互动卡片消息通知相关人员。
 
 > 由企业微信版本迁移而来：登录（OAuth 网页授权）、消息通知（应用消息卡片）、成员同步（通讯录）已全面切换到飞书；企业微信之外的人员通过 `/m` 免登录登记借用。

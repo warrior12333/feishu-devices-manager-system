@@ -2,6 +2,15 @@
 
 English | [简体中文](./README.zh-CN.md)
 
+![Node.js](https://img.shields.io/badge/Node.js-18%2B-339933?style=flat&logo=node.js&logoColor=white)
+![Express](https://img.shields.io/badge/Express-4-000000?style=flat&logo=express&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-5.7%2B-4479A1?style=flat&logo=mysql&logoColor=white)
+![Vue.js](https://img.shields.io/badge/Vue.js-3.5-4FC08D?style=flat&logo=vuedotjs&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-5-646CFF?style=flat&logo=vite&logoColor=white)
+![Vant](https://img.shields.io/badge/Vant-4-001938?style=flat&logo=vant&logoColor=white)
+![Feishu](https://img.shields.io/badge/Feishu-Open%20Platform-00D6B9)
+![JWT](https://img.shields.io/badge/Auth-JWT-D63AFF?style=flat&logo=jsonwebtokens&logoColor=white)
+
 A device asset management H5 app built on a **Feishu (Lark) custom app**: device inventory (multi-image + QR codes), borrow requests with owner approval, photo-based device pickup and return confirmation. The entire approval flow happens in-app, with Feishu interactive card messages notifying the people involved.
 
 > Migrated from an earlier WeCom (Enterprise WeChat) version: login (OAuth web authorization), message notifications (app message cards) and member sync (directory) now run entirely on Feishu. People outside Feishu can borrow via `/m` with a simple registration form.
