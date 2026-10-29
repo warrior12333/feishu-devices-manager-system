@@ -33,6 +33,100 @@
 - 飞书对接：OAuth 网页授权登录（`passport.feishu.cn`）、`tenant_access_token` 内存缓存、互动卡片消息（`im/v1/messages`）、通讯录同步、jsapi_ticket（H5 JSAPI 鉴权）
 - 安全：服务端出站请求统一 SSRF 防护（域名白名单 + DNS 解析拒绝环回/私有/保留地址）；上传类型白名单 + 压缩；JWT httpOnly 会话（普通用户 / 超管 / 外部人员三套独立 cookie）；SQL 全参数绑定
 
+## 快速开始（部署教程）
+
+从零到跑通，只需 5 步。前提：一台有公网 IP 的 Linux 服务器、已安装 Node.js ≥ 18 与 MySQL 5.7+/8.0、一个解析到服务器的 HTTPS 域名。
+
+### 第 1 步：拉取代码并安装依赖
+
+```bash
+git clone git@github.com:warrior12333/feishu-devices-manager-system.git
+cd feishu-devices-manager-system
+npm run setup        # = 安装 server 与 web 两端依赖
+```
+
+### 第 2 步：创建数据库
+
+```bash
+mysql -uroot -p -e "CREATE DATABASE device_manager DEFAULT CHARSET utf8mb4 COLLATE utf8mb4_unicode_ci"
+# 建议单独建账号：
+mysql -uroot -p -e "CREATE USER 'dm'@'localhost' IDENTIFIED BY '强密码'; GRANT ALL ON device_manager.* TO 'dm'@'localhost'"
+```
+
+表结构无需手动导入——服务首次启动时自动建表，后续版本的新字段也会自动增量迁移。
+
+### 第 3 步：配置 .env
+
+```bash
+cp server/.env.example server/.env
+vim server/.env
+```
+
+最少要改这几项（完整说明见下文「上线配置」）：
+
+```ini
+BASE_URL=https://你的域名        # 公网 HTTPS 域名，与飞书重定向 URL 一致
+JWT_SECRET=一段随机长字符串      # node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+DB_USER=dm
+DB_PASSWORD=强密码
+DB_NAME=device_manager
+DEV_MODE=true                    # 先用 true 体验，上线前改 false
+# 上线飞书登录时补充：
+SUPERADMIN_USER=superadmin       # 超管控制台 /superadmin 登录账号
+SUPERADMIN_PASSWORD=随机长密码
+FEISHU_APP_ID=cli_xxx
+FEISHU_APP_SECRET=******
+```
+
+### 第 4 步：构建前端并启动
+
+```bash
+npm run build        # 生成 web/dist，由后端静态托管
+npm start            # 监听 3000 端口
+# 生产建议 pm2 守护：
+#   npm i -g pm2 && pm2 start server/src/index.js --name device-manager && pm2 save
+```
+
+此时打开 `http://服务器IP:3000`：`DEV_MODE=true` 下可用内置测试账号（张三/管理员）体验完整流程；`/superadmin` 可进超管控制台。确认没问题后，配 Nginx + HTTPS：
+
+```nginx
+server {
+    listen 443 ssl;
+    server_name 你的域名;
+    # ssl_certificate / ssl_certificate_key 按你的证书填写
+
+    client_max_body_size 25m;                 # 设备图片上传
+    location / {
+        proxy_pass http://127.0.0.1:3000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+```
+
+### 第 5 步：对接飞书（启用正式登录）
+
+1. 打开[飞书开发者后台](https://open.feishu.cn) → 创建**企业自建应用**，把 **App ID / App Secret** 填入 `.env` 的 `FEISHU_APP_ID` / `FEISHU_APP_SECRET`
+2. 应用后台 → 安全设置 → 重定向 URL：添加 `https://你的域名/api/feishu/callback`
+3. 权限管理：开通「获取用户基本信息」「以应用身份发消息（im:message）」「通讯录读取」
+4. 网页应用 → 主页地址填 `https://你的域名/f`（工作台点开免登直达）
+5. 创建版本并**发布**（权限发布后才生效）
+6. 把 `.env` 改成 `DEV_MODE=false`，`pm2 restart device-manager`
+
+成员从飞书工作台打开应用即可自动建档登录。第一个管理员二选一：
+
+- `.env` 的 `ADMIN_USERIDS` 填该成员的飞书 open_id（逗号分隔多个），重启生效；
+- 或先登录系统，再用 `/superadmin` 超管控制台 →「成员管理」里直接把他设为管理员。
+
+### 验证清单
+
+- [ ] 打开 `https://你的域名/f` 能跳飞书授权并登录成功
+- [ ] 首页能新增设备、上传图片、看到公告轮播
+- [ ] 提交借用申请，审批人的飞书能收到卡片消息
+- [ ] `/m` 用手机号登记后可发起外部借用
+- [ ] `/superadmin` 能登录并切换「系统开关」
+
 ## 目录结构
 
 ```
